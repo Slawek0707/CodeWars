@@ -1,0 +1,59 @@
+https://www.codewars.com/kata/56baeae7022c16dd7400086e
+
+using System;
+public class PhoneDir 
+{
+    public static string Phone(string strng, string num)
+    {      
+      string[] book = strng.Split('\n');
+      int IndexOfContact = -1;
+      for(int i = 0; i< book.Length;i++)
+      {
+          if(book[i].Contains("+" + num))
+          {
+            if(IndexOfContact != -1)
+            {
+              return "Error => Too many people: " + num;
+            }
+            else
+            IndexOfContact = i;
+          }        
+      }
+      
+      if(IndexOfContact == -1)
+      return "Error => Not found: " + num;
+        
+      string Name = book[IndexOfContact].Substring(book[IndexOfContact].IndexOf('<')+1, book[IndexOfContact].IndexOf('>') - book[IndexOfContact].IndexOf('<') -1); 
+      string Adres = FunctionGetAdres(book[IndexOfContact], num);
+    
+      return "Phone => " + num + ", Name => "+ Name+ ", Address => " + Adres;
+    }
+  
+  public static string FunctionGetAdres(string contact, string number)
+  {
+      contact = contact.Replace('_', ' ');    
+      contact = contact.Replace(',', ' ');  
+      contact = contact.Replace('/', ' ');
+      contact = contact.Replace(';', ' ');
+      string[] AdressSplit = contact.Split(' ');
+      string Adress = "";
+    
+        foreach(string newAdress in AdressSplit)
+        {
+          if(newAdress.Contains(number))
+            continue;
+          else if(newAdress.Contains("<"))
+            continue;
+          else if(newAdress.Contains(">"))
+            continue;
+          else
+          {
+            if(newAdress.Length > 1)            
+              Adress = Adress + " " + newAdress.Trim();            
+          }
+        }
+    
+      return Adress.Trim();    
+  }
+  
+ }
