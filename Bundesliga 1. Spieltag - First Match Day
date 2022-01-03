@@ -1,0 +1,187 @@
+https://www.codewars.com/kata/57c178e16662d0d932000120
+
+using System;
+public class Bundesliga
+{
+  public static string[] TeamName;
+  public static int[] MatchPlayed;
+  public static int[] Points;
+  public static int[] MatchWin;
+  public static int[] MatchLost;
+  public static int[] MatchTie;
+  public static int[] GoalShot;
+  public static int[] GoalLost;
+  public static int[] Place;
+  public static string[] TeamResult;
+    
+  public static string Table(string[] results)
+  {
+    TeamName = new string[0];
+    Points = new int[0];
+    MatchPlayed = new int[0];
+    MatchWin = new int[0];
+    MatchLost = new int[0];
+    MatchTie = new int[0];
+    GoalShot = new int[0];
+    GoalLost = new int[0];
+    Place = new int[0];
+    TeamResult = new string[0];
+    
+    foreach(string match in results)
+    {
+      int[] MatchResoult = new int[2];
+      string[] Team = new string[2];      
+        string TeamNameNew = match.Remove(0,4);
+        Team[0] = TeamNameNew.Remove(TeamNameNew.IndexOf("-")-1);          
+        Team[1] = TeamNameNew.Remove(0, TeamNameNew.IndexOf("-")+2);   
+      bool Played = true; 
+      if(match[0] != '-')
+      {
+        MatchResoult[0] = Convert.ToInt32(match[0].ToString());
+        MatchResoult[1] = Convert.ToInt32(match[2].ToString());
+      }
+      else
+      {
+         Played = false;
+         MatchResoult[0] = 0;
+         MatchResoult[1] = 0;
+      }
+      
+      int FirstNameExist = -1;
+      int SecoundNameExist = -1;
+      int i = 0;        
+        foreach(string Name in TeamName)
+        {
+          if(Name == Team[0])
+            FirstNameExist = i;
+          if(Name == Team[1])
+            SecoundNameExist = i;
+          i++;
+        }
+        
+        if(FirstNameExist == -1)
+          FunctionAddTeam(Team[0], MatchResoult[0],  MatchResoult[1], Played);
+        else
+          FunctionAddScoreToTeam(FirstNameExist, MatchResoult[0],  MatchResoult[1], Played);
+        if(SecoundNameExist == - 1)
+          FunctionAddTeam(Team[1], MatchResoult[1],  MatchResoult[0], Played);
+        else
+          FunctionAddScoreToTeam(FirstNameExist, MatchResoult[1],  MatchResoult[0], Played);      
+    }
+    
+    FunctionAddTeamResult();
+    return CreateTable();
+  }
+  
+  public static void FunctionAddTeamResult()
+  {
+    int j = 0;
+    foreach(string name in TeamName)
+    {
+      Array.Resize(ref TeamResult, TeamResult.Length + 1);
+      string TempName = name;
+      while(TempName.Length < 30)
+        TempName = TempName + " ";
+      
+        TeamResult[j] = TempName + MatchPlayed[j] + "  " + MatchWin[j] + "  " 
+        + MatchTie[j] + "  " + MatchLost[j] + "  " + GoalShot[j] + ":" + GoalLost[j] + "  " + Points[j];
+      j++;
+    }     
+  }
+  
+  public static string CreateTable()
+  {
+    string[] New = new string[TeamResult.Length];
+    string TableResult = "";
+    int i = 0;    
+    foreach (string team in TeamResult)
+    {
+      int j =0;
+      int place = 1;    
+      int score = Convert.ToInt32(team[47].ToString());
+      foreach (string teams in TeamResult)
+      {
+         if(i != j)
+         {
+           if(score < Convert.ToInt32(teams[47].ToString()))                      
+             place++;
+           else
+           {
+             if(Convert.ToInt32(team[42].ToString())-Convert.ToInt32(team[44].ToString()) < Convert.ToInt32(teams[42].ToString())-Convert.ToInt32(teams[44].ToString()))
+                place++;
+             else if(Convert.ToInt32(team[42].ToString())-Convert.ToInt32(team[44].ToString()) == Convert.ToInt32(teams[42].ToString())-Convert.ToInt32(teams[44].ToString()))
+             {               
+               if(Convert.ToInt32(team[42].ToString()) < Convert.ToInt32(teams[42].ToString()))
+                place++;
+             }
+           }
+         }        
+        j++;
+      }
+      
+      if(place<10)
+        New[i] = " " + place + ". " +  team;
+      else
+        New[i] = place + ". " +  team;
+      i++;
+    } 
+    
+    Array.Sort(New, 0,New.Length);    
+ 
+    int k = 0;
+    foreach(string team in New)
+    {
+      if(k<New.Length-1)
+      TableResult = TableResult+ team + "\n";
+      else
+        TableResult = TableResult+ team ;
+      
+        k++;    
+    }
+    
+    return TableResult;
+  }
+  
+  public static void FunctionAddTeam(string Name, int GoalW, int GoalL, bool Played)
+  {    
+          Array.Resize(ref TeamName,TeamName.Length + 1);
+          Array.Resize(ref Place,Place.Length + 1);
+          Array.Resize(ref MatchPlayed,MatchPlayed.Length + 1);
+          Array.Resize(ref MatchWin, MatchWin.Length + 1);
+          Array.Resize(ref MatchLost, MatchLost.Length + 1);
+          Array.Resize(ref MatchTie, MatchTie.Length + 1);
+          Array.Resize(ref GoalShot, GoalShot.Length + 1);
+          Array.Resize(ref GoalLost, GoalLost.Length + 1);
+          Array.Resize(ref Points, Points.Length + 1);
+          TeamName[TeamName.Length - 1] = Name;
+          Place[Place.Length - 1] = 1;
+          if(Played)
+            FunctionAddScoreToTeam(TeamName.Length-1, GoalW, GoalL,Played);
+          else            
+          MatchPlayed[MatchPlayed.Length - 1] = 0;   
+  }  
+  
+  public static void FunctionAddScoreToTeam(int index,int GoalW, int GoalL, bool Played)
+  {
+    if(Played)
+    {
+     MatchPlayed[index]++;
+      
+      if(GoalW > GoalL)
+        {
+          Points[index] =+3;
+          MatchWin[index]++;
+        }
+      else if(GoalW == GoalL)
+        {
+        Points[index] =+1;
+        MatchTie[index]++;
+        }
+      else
+        MatchLost[index]++;
+      
+      GoalShot[index] =+ GoalW;
+      GoalLost[index] =+ GoalL;        
+    }    
+  }
+}
