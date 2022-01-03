@@ -1,0 +1,27 @@
+https://www.codewars.com/kata/559a28007caad2ac4e000083
+
+using System;
+using System.Numerics;
+using System.Collections.Generic;
+
+public class SumFct
+{
+  public static BigInteger perimeter(BigInteger n) 
+  {
+    List<BigInteger> lis = new List<BigInteger>();
+    BigInteger temp1 = 0;
+    BigInteger temp2 = 1;
+    BigInteger result = 0;
+    for(int i=0; i<=n; i++)
+    {      
+      result = temp1 + temp2;         
+      temp2 = temp1;
+      temp1 = result; 
+      lis.Add(result);
+    }   
+    result = 0;
+    foreach(BigInteger l in lis)    
+    result = result + l;        
+    return result *4;
+  }
+}
