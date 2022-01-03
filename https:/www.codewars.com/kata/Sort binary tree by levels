@@ -1,0 +1,37 @@
+https://www.codewars.com/kata/52bef5e3588c56132c0003bc
+
+using System;
+using System.Collections.Generic;
+
+class Kata
+{
+  public static List<int> TreeByLevels(Node node)
+  {
+    List<int> ResultList = new List<int>();
+    List<Node> NodeList = new List<Node>();
+    if(node != null)
+      {
+        int i =1;       
+        NodeList.Add(node);
+        for(int j = 0; j<i;j++)
+        {
+          if(NodeList[j].Left != null)
+          {
+            NodeList.Add(NodeList[j].Left);
+            i++;
+          }
+          if(NodeList[j].Right != null)
+          {
+            NodeList.Add(NodeList[j].Right);
+            i++;
+          }          
+        }            
+        foreach(Node no in NodeList)
+          ResultList.Add(no.Value);
+      
+        return ResultList;
+      }
+      else
+        return new List<int>();
+  }   
+}
