@@ -1,0 +1,108 @@
+https://www.codewars.com/kata/52742f58faf5485cae000b9a
+
+using System;
+public class HumanTimeFormat{
+  public static string formatDuration(int seconds){
+    if(seconds == 0)      
+    return "now";
+    else
+    {
+    string Years = Function_ConvertSecoundToYers(seconds);      
+    string Days = Function_ConvertSecoundToDays(seconds);
+    string Hour = Function_ConvertSecoundToHour(seconds);
+    string Minute = Function_ConvertSecoundToMinute(seconds);      
+    string Second = Function_ConvertSecoundToSecond(seconds); 
+      
+      if(Minute != "")
+      {    
+        if(Second != "")
+        {         
+        Second = " and " + Second;
+        }
+      }
+                 
+      if(Hour != "")
+      {
+        if(Second == "")
+        {         
+          Hour = Hour + " and ";
+        }        
+        else
+        Hour = Hour + ", ";
+      }
+      
+      if(Days != "")
+      {
+        Days = Days + ", ";
+      }
+      
+      if(Years != "")
+      {
+        Years = Years + ", ";
+      }
+      
+     
+    string Time = Years + Days + Hour + Minute + Second;
+    return Time;
+    }
+    }
+  
+  public static string Function_ConvertSecoundToYers(int sec)
+    {    
+    float year = sec/60/60/24/365;
+    string Year = year + " years";
+    if(year == 1)
+    Year = year + " year";    
+    if(year == 0)
+    return "";
+    else
+    return Year;
+  }
+  
+  public static string Function_ConvertSecoundToDays(int sec)
+    {    
+    float days = sec/60/60/24 % 365;
+    string Days = days + " days";
+    if(days == 0)
+    return "";
+    else
+    return Days;
+  }
+  
+  public static string Function_ConvertSecoundToHour(int sec)
+    {    
+    float hour = sec/60/60 %24;
+    string Hour = hour + " hours";
+    if(hour == 1)
+      Hour = hour + " hour";
+    if(hour == 0)
+    return "";
+    else
+    return Hour;
+  }
+  
+  public static string Function_ConvertSecoundToMinute(int sec)
+    {    
+    float minute = sec/60 %60;    
+    string Minute = minute + " minutes";
+    if(minute == 1)
+    Minute = minute + " minute";    
+    if(minute == 0)
+    return "";
+    else
+    return Minute;
+  }
+  
+   public static string Function_ConvertSecoundToSecond(int sec)
+    {    
+    float second = sec %60;    
+    string Second = second + " seconds";
+    if(second == 1)
+    Second = second + " second";    
+    if(second == 0)
+    return "";
+    else
+    return Second;
+  }
+  
+}
