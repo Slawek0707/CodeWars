@@ -1,0 +1,108 @@
+https://www.codewars.com/kata/52a382ee44408cea2500074c
+
+using System;
+public class Matrix
+{
+   public static int Determinant(int[][] matrix)
+   {      
+      if(matrix.Length ==1)
+      {
+        return matrix[0][0];
+      }
+      else if(matrix.Length ==2)
+      {
+        return Matrix2X2(matrix);
+      }
+     else if(matrix.Length ==3)
+     {       
+        return Matrix3X3(matrix);            
+     }     
+     else 
+     {
+       return FunctionGetMultiMatrixResult(matrix);
+     }
+   }
+  
+  public static int FunctionGetMultiMatrixResult(int[][] matrix)
+  {
+    int Result = 0; 
+    
+     if(matrix.Length > 3)
+      {
+        int[] Sum = new int[matrix.Length];
+        for(int i =0;i<matrix.Length;i++)
+        {
+          Sum[i] = FunctionGetMultiMatrixResult(MatrixLength(matrix,i));
+        }    
+       Result = FunctionSum(Sum, matrix[0]);
+      }
+      else
+      {
+        Result = Matrix3X3(matrix);
+      }        
+    return Result;
+  }
+  
+  public static int[][] MatrixLength(int[][] matrix, int pos)
+  {
+    int[][] ResultMatrix = new int[matrix.Length-1][]; 
+    
+      for(int x =1;x<matrix.Length;x++)
+      { 
+        int a = 0;
+        int[] arr = new int[matrix.Length-1];
+        for(int y =0;y<matrix.Length;y++)
+        {
+          if(pos!=y)
+          {
+            arr[a]=matrix[x][y];             
+            a++;                   
+          }
+        }        
+        ResultMatrix[x-1] = arr;
+      }                           
+      return ResultMatrix;
+  }  
+  
+  public static int Matrix3X3(int[][] matrix)
+  { 
+    int[] sum = new int[matrix.Length];
+    int[][] matrix2x2 = new int[2][]; 
+    for(int i =0;i<matrix.Length;i++)
+    {
+      for(int x =1;x<matrix.Length;x++)
+      { 
+        int a = 0;
+        int[] arr = new int[matrix.Length-1];
+        for(int y =0;y<matrix.Length;y++)
+        {
+          if(i!=y)
+          {
+            arr[a]=matrix[x][y];             
+            a++;                   
+          }
+        }        
+        matrix2x2[x-1] = arr;
+      }                  
+      sum[i] = Matrix2X2(matrix2x2);      
+    }    
+    return FunctionSum(sum, matrix[0]);    
+  }  
+  
+  public static int FunctionSum(int[] sum, int[] matrix)
+  {
+    int Result = 0;
+    int z = 1;
+    for(int i=0;i<sum.Length; i++)
+    {
+      Result += matrix[i]*z*sum[i];      
+      z = z*-1;
+    }        
+    return Result;
+  }
+  
+  public static int Matrix2X2(int[][] mat)
+  {    
+    return mat[0][0]*mat[1][1]-mat[0][1]*mat[1][0];
+  }  
+}
